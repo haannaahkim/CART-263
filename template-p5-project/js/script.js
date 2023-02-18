@@ -21,7 +21,7 @@ var palette;
 var ballX, ballY;
 var ballSize = 80; //ball size
 var gravity = 0.01; //gravity of the ball
-var ySpeed = 0.9;  //speed that is it falling vertically
+var speedBall = 0.9;  //speed that is it falling vertically
 
 function setup() {
   createCanvas(3000, 3000);
@@ -39,7 +39,7 @@ function setup() {
   
   //PARTICLES
   change = 30;
-  palette = [color(146, 167, 202),
+  palette = [color('white'),
                   color(186, 196, 219,200)];
   
   
@@ -59,10 +59,10 @@ function draw() {
 
 
     //red ball
-    ySpeed += gravity;
+    speedBall += gravity;
   
     // Update ball position
-    ballY += ySpeed;
+    ballY += speedBall;
     
     // Draw the ball
     fill('orange');
@@ -77,47 +77,51 @@ function draw() {
     });
     
 
-  change += random(0.02);
+  change += random(0.01);
   }
 }
 
-
-function Particle(radius, xpos, ypos, roughness, angle, color) {
-
-  this.x = xpos;
-  this.y = ypos;
-  this.vx = random(-1, 1);
-  this.vy = random(1, 0);
+class Particle {
+    constructor(radius, xpos, ypos, roughness, angle, color) {
+      this.x = xpos;
+      this.y = ypos;
+      this.vx = random(-1, 1);
+      this.vy = random(1, 0);
+      this.radius = radius;
+      this.roughness = roughness;
+      this.angle = angle;
+      this.color = color;
+    }
   
-  this.move = function() {
+  
+  move() {
+
     this.x += this.vx;
     this.y += this.vy;
-    
-    // PARTICLES: Bounce off the edges
-    if (this.x < 0 || this.x > width) {
-      this.vx *= -1;
+
+    if (this.x < 0 || this.x > width){
+        this.vx  *= -1;
     }
-    if (this.y < 0 || this.y > height) {
-      this.vy *= -1;
-    }
+if(this.y < 0 || this.y > height){
+    this.vy *= -1;
+}
   }
 
-  this.show = function(change) {
+  show(change) {
     noStroke();
-    fill(color);
+    fill(this.color);
     push();
     translate(this.x, this.y);
-    rotate(angle + change);
+    rotate(this.angle + change);
     beginShape();
-    for (var i = 0; i < TWO_PI; i += 0.5) {
-      var r = radius + map(noise(-5 + i/0.5, change), 0, 5, -roughness, roughness);
+    for (var i = 0; i < TWO_PI; i += 0.2) {
+      var r = this.radius + map(noise(1 + i/0.5, change), 0, 6, -this.roughness, this.roughness);
       vertex(r * sin(i), r * cos(i));
     }
     endShape();
     pop();
   }
 }
-
 
 //CREATING THE ALLERGIC REACTION
 function createReaction() {
@@ -140,7 +144,7 @@ class Prong {
   
   update() {
     this.rad -= 0.1;
-    this.ang += random(-PI/5, PI/5); //random direction angle for points
+    this.ang += random(-PI/5, PI/6); //random direction angle for points
     
 
     //travel in the direction of the angle
@@ -163,9 +167,3 @@ class Prong {
 ///RESOURCES//
 // https://medium.com/creative-coding-space/meet-blobby-in-p5-js-5d9d99232400
 // https://www.youtube.com/watch?v=cHlhdhZuZuc&list=LL&index=13&t=12s&ab_channel=BarneyCodes
-
-
-
-
-
-
