@@ -43,7 +43,7 @@ function setup() {
                   color(186, 196, 219,200)];
   
   
-  for (var i = 0; i < 200; i++) {
+  for (var i = 0; i < 200; i++) { //creating x number of particles
     particles.push(new Particle(0.1 + 1 * i, random(width), random(height), i * 1, i * random(30), palette[floor(random(2))]));
   }
   
@@ -69,7 +69,7 @@ function draw() {
     ellipse(ballX, ballY, ballSize, ballSize);
 
   
-  //POINT: if animation not done, loop over points and update position
+  //PRONG: if animation not done, loop over points and update position
   if(!done) {
     prong.forEach(prong => {
       prong.update();
@@ -82,24 +82,24 @@ function draw() {
 }
 
 class Particle {
-    constructor(radius, xpos, ypos, roughness, angle, color) {
+    constructor(radius, xpos, ypos, roughness, angle, color) {   ///characteristics of particles
       this.x = xpos;
       this.y = ypos;
       this.vx = random(-1, 1);
       this.vy = random(1, 0);
-      this.radius = radius;
+      this.radius = 5;
       this.roughness = roughness;
       this.angle = angle;
       this.color = color;
     }
   
   
-  move() {
+  move() {  //tells the shape how to move by telling how to change position and make it stay within the canvas
 
     this.x += this.vx;
     this.y += this.vy;
 
-    if (this.x < 0 || this.x > width){
+    if (this.x < 0 || this.x > width){   
         this.vx  *= -1;
     }
 if(this.y < 0 || this.y > height){
@@ -107,7 +107,7 @@ if(this.y < 0 || this.y > height){
 }
   }
 
-  show(change) {
+  show(change) {  //showing the shapes on screen 
     noStroke();
     fill(this.color);
     push();
@@ -116,7 +116,7 @@ if(this.y < 0 || this.y > height){
     beginShape();
     for (var i = 0; i < TWO_PI; i += 0.2) {
       var r = this.radius + map(noise(1 + i/0.5, change), 0, 6, -this.roughness, this.roughness);
-      vertex(r * sin(i), r * cos(i));
+      vertex(r*sin(i), r*cos(i));
     }
     endShape();
     pop();
@@ -167,3 +167,4 @@ class Prong {
 ///RESOURCES//
 // https://medium.com/creative-coding-space/meet-blobby-in-p5-js-5d9d99232400
 // https://www.youtube.com/watch?v=cHlhdhZuZuc&list=LL&index=13&t=12s&ab_channel=BarneyCodes
+// https://www.youtube.com/watch?v=Kp070rI_G48&ab_channel=Mr.Erdreich
