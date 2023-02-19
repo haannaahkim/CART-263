@@ -12,8 +12,10 @@ The particle system is the blue/white cells and we slowly see little reactions c
 
 I wanted to follow the theme of invasion and overpowering. Where the reaction kind of takes over your body with hives and itchiness and feeling uncomfortable. 
 
+I also wanted to represent the body fighting off the reaction. 
+
 
 I used these two sites to use inspiration from, aesthetically and technically. 
 // https://medium.com/creative-coding-space/meet-blobby-in-p5-js-5d9d99232400
 // https://www.youtube.com/watch?v=cHlhdhZuZuc&list=LL&index=13&t=12s&ab_channel=BarneyCodes
-
+//https://www.youtube.com/watch?v=Kp070rI_G48&ab_channel=Mr.Erdreich
