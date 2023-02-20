@@ -7,7 +7,7 @@ Theme: When you eat something and you have an allergic reaction
 // PRONG
 let prong = []; //an empty array to store points
 const num = 27;  //how many numbers of points to create
-const startRad = 20; ///starting radius of the points
+const radius = 20; ///starting radius of the points
 const speed = 0.2;  //constant set of speed of the points
 let done = false;   //track burst animation if it is done or not
 
@@ -21,7 +21,7 @@ var palette;
 var ballX, ballY;
 var ballSize = 80; //ball size
 var gravity = 0.01; //gravity of the ball
-var speedBall = 0.9;  //speed that is it falling vertically
+var speedB = 0.9;  //speed that is it falling vertically
 
 function setup() {
   createCanvas(3000, 3000);
@@ -39,12 +39,11 @@ function setup() {
   
   //PARTICLES
   change = 30;
-  palette = [color('white'),
-                  color(186, 196, 219,200)];
+  palette = [color('white'), color(186, 196, 219,100)];
   
   
-  for (var i = 0; i < 200; i++) { //creating x number of particles
-    particles.push(new Particle(0.1 + 1 * i, random(width), random(height), i * 1, i * random(30), palette[floor(random(2))]));
+  for (var i = 0; i < 150; i++) { //creating x number of particles
+    particles.push(new Particle(0.1 + 1 * i, random(width), random(height), i * 2, i * random(30), palette[floor(random(2))]));
   }
   
 }
@@ -58,11 +57,11 @@ function draw() {
     }
 
 
-    //red ball
-    speedBall += gravity;
+    //ball falling
+    speedB += gravity;
   
     // Update ball position
-    ballY += speedBall;
+    ballY += speedB;
     
     // Draw the ball
     fill('orange');
@@ -75,9 +74,8 @@ function draw() {
       prong.update();
       prong.draw();
     });
-    
 
-  change += random(0.01);
+  change += random(-0.02);
   }
 }
 
@@ -87,37 +85,31 @@ class Particle {
       this.y = ypos;
       this.vx = random(-1, 1);
       this.vy = random(1, 0);
-      this.radius = 5;
+      this.radius = 2;
       this.roughness = roughness;
-      this.angle = angle;
+      this.angle = random(0, 10);
       this.color = color;
     }
   
   
   move() {  //tells the shape how to move by telling how to change position and make it stay within the canvas
-
     this.x += this.vx;
     this.y += this.vy;
-
-    if (this.x < 0 || this.x > width){   
-        this.vx  *= -1;
-    }
-if(this.y < 0 || this.y > height){
-    this.vy *= -1;
-}
   }
 
   show(change) {  //showing the shapes on screen 
     noStroke();
-    fill(this.color);
     push();
+    fill(this.color);
     translate(this.x, this.y);
-    rotate(this.angle + change);
+    rotate( change);
     beginShape();
-    for (var i = 0; i < TWO_PI; i += 0.2) {
+    for (var i = 0; i < TWO_PI; i += 0.2) { //vertex points
       var r = this.radius + map(noise(1 + i/0.5, change), 0, 6, -this.roughness, this.roughness);
-      vertex(r*sin(i), r*cos(i));
-    }
+      var x = r * sin(i);
+      var y = r * cos(i);
+      vertex(x, y);
+    } 
     endShape();
     pop();
   }
@@ -130,7 +122,7 @@ function createReaction() {
   prong = [];
   
   for(let i = 0; i < num; i ++) {
-    prong.push(new Prong(random(width), random(height), random(), startRad));
+    prong.push(new Prong(random(width), random(height), random(), radius));
   }
 }
 
@@ -144,12 +136,12 @@ class Prong {
   
   update() {
     this.rad -= 0.1;
-    this.ang += random(-PI/5, PI/6); //random direction angle for points
+    this.ang += random(-PI/5, PI/5); //random direction angle for points
     
 
     //travel in the direction of the angle
-    this.x += cos(this.ang) * this.rad * speed; 
-    this.y += sin(this.ang) * this.rad * speed;
+    this.x += sin(this.ang) * this.rad * speed; 
+    this.y += cos(this.ang) * this.rad * speed;
   }
   
   draw() {
@@ -157,7 +149,7 @@ class Prong {
     let startColor = color(55, 200, 255);
     let endColor = color('red');
     
-    let col = lerpColor(startColor, endColor, map(this.rad, startRad, 0, 0, 1)); //thatll let the first color show and gradually change to end color using the map function
+    let col = lerpColor(startColor, endColor, map(this.rad, radius, 0, 0, 1)); //thatll let the first color show and gradually change to end color using the map function
     fill(col);
     ellipse(this.x, this.y, this.rad * 1.5); //diameter of the burst
     
@@ -166,5 +158,6 @@ class Prong {
 
 ///RESOURCES//
 // https://medium.com/creative-coding-space/meet-blobby-in-p5-js-5d9d99232400
+//https://github.com/playgrdstar/p5_blob/blob/master/sketch.js
 // https://www.youtube.com/watch?v=cHlhdhZuZuc&list=LL&index=13&t=12s&ab_channel=BarneyCodes
 // https://www.youtube.com/watch?v=Kp070rI_G48&ab_channel=Mr.Erdreich
